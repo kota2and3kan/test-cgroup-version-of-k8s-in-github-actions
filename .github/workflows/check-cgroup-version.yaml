@@ -1,0 +1,46 @@
+name: Check cgroup version
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  use-ubuntu-20.04:
+    runs-on: ubuntu-20.04
+    steps:
+
+      - name: Create k8s cluster by using kind
+        uses: helm/kind-action@v1.7.0
+        with:
+          cluster_name: kind-on-ubuntu-20-04
+          config: .github/kind-cluster.yaml
+          node_image: kindest/node:v1.27.1
+
+      - name: Check cgroup version
+        run: |
+          echo "Check k8s cluster version"
+          kubectl version --output=json
+          echo "Cgroup version of Docker"
+          docker info 2>&1 | grep -i cgroup
+          echo "Check cgroup directory in the container"
+          kubectl run check-cgroup-version -it --rm --restart Never --image alpine:3.18.0 -- ls -l /sys/fs/cgroup/
+
+  use-ubuntu-22.04:
+    runs-on: ubuntu-22.04
+    steps:
+
+      - name: Create k8s cluster by using kind
+        uses: helm/kind-action@v1.7.0
+        with:
+          cluster_name: kind-on-ubuntu-22-04
+          config: .github/kind-cluster.yaml
+          node_image: kindest/node:v1.27.1
+
+      - name: Check cgroup version
+        run: |
+          echo "Check k8s cluster version"
+          kubectl version --output=json
+          echo "Cgroup version of Docker"
+          docker info 2>&1 | grep -i cgroup
+          echo "Check cgroup directory in the container"
+          kubectl run check-cgroup-version -it --rm --restart Never --image alpine:3.18.0 -- ls -l /sys/fs/cgroup/
