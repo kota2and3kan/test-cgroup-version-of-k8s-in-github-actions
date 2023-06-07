@@ -5,7 +5,7 @@ on:
 
 jobs:
 
-  use-ubuntu-20.04:
+  use-ubuntu-20-04:
     runs-on: ubuntu-20.04
     steps:
 
@@ -25,7 +25,7 @@ jobs:
           echo "Check cgroup directory in the container"
           kubectl run check-cgroup-version -it --rm --restart Never --image alpine:3.18.0 -- ls -l /sys/fs/cgroup/
 
-  use-ubuntu-22.04:
+  use-ubuntu-22-04:
     runs-on: ubuntu-22.04
     steps:
 
